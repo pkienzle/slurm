@@ -1170,7 +1170,7 @@ extern void create_srun_job(void **p_job, bool *got_alloc,
 	ListIterator opt_iter, resp_iter;
 	srun_job_t *job = NULL;
 	int i, max_list_offset, max_het_job_offset, het_job_offset = -1,
-		het_step_offset = 0;
+		het_step_offset = -1;
 	uint32_t my_job_id = 0, het_job_id = 0;
 	char *het_job_nodelist = NULL;
 	bool begin_error_logged = false;
@@ -1260,6 +1260,8 @@ extern void create_srun_job(void **p_job, bool *got_alloc,
 			 * Check using het_job_offset here, but we use
 			 * het_step_offset for the job being added.
 			 */
+			if (list_count(opt_list) > 1)
+				het_step_offset = 0;
 			while ((opt_local = get_next_opt(het_job_offset))) {
 				srun_opt_t *srun_opt = opt_local->srun_opt;
 				xassert(srun_opt);
